@@ -93,11 +93,3 @@ npm run flow:verify
 ```
 
 The full flow uses real testnet assets and can take several minutes while commit–reveal and FDC voting windows finalize. `.env` and generated local deployment state are excluded from Git.
-
-
-Presentation assets:
-
-- [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) — three-minute live presentation walkthrough.
-- [`video/DEMO_VIDEO_DRAFT.md`](./video/DEMO_VIDEO_DRAFT.md) — 75-second video storyboard and cursor plan.
-- [`video/voiceover.txt`](./video/voiceover.txt) — final narration copy.
-- [`video/captions.srt`](./video/captions.srt) — timed draft captions.
