@@ -94,11 +94,4 @@ npm run flow:verify
 
 The full flow uses real testnet assets and can take several minutes while commit–reveal and FDC voting windows finalize. `.env` and generated local deployment state are excluded from Git.
 
-## Hackathon submission
 
-- Track: interoperable asset products.
-- User: funds, treasury teams, wallets and OTC desks sourcing native XRP.
-- New work: commit–reveal escrow, FTSOv2 guard, XRPL Payment memo flow, FDC proof adapter, deployment automation, live verifier and browser Testnet Lab.
-- Next step: onboard external maker wallets and replace dcUSD with a production Flare stablecoin route.
-
-The separate presentation walkthrough is in [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md).
