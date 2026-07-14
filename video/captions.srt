@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:06,000
+Buying native XRP should not require exposing your price
+or trusting a desk to settle.
+
+2
+00:00:06,000 --> 00:00:16,000
+Cinder is a commit-reveal RFQ market on Flare.
+Buyers lock escrow, makers compete with hidden quotes.
+
+3
+00:00:16,000 --> 00:00:29,000
+Connect a Coston2 wallet, claim demo liquidity,
+then approve and create a real escrow transaction.
+
+4
+00:00:29,000 --> 00:00:40,000
+Only the quote hash reaches the chain during bidding.
+The secret stays in the browser until reveal.
+
+5
+00:00:40,000 --> 00:00:49,000
+The lowest valid quote inside the live FTSOv2 band wins—
+without a Cinder operator key.
+
+6
+00:00:49,000 --> 00:01:00,000
+The winner delivered ten native XRP on XRPL Testnet
+with the contract-generated payment reference.
+
+7
+00:01:00,000 --> 00:01:09,000
+FDC verified the destination, amount and reference.
+Only then did escrow release ten cUSD.
+
+8
+00:01:09,000 --> 00:01:15,000
+Cinder makes native XRP safely executable on Flare.
+Try the live testnet demo.
