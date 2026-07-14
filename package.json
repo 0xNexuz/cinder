@@ -1,0 +1,29 @@
+{
+  "name": "cinder-rfq",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/validate-static.mjs",
+    "contracts:check": "node scripts/compile-contracts.mjs",
+    "accounts:create": "node scripts/create-testnet-accounts.mjs",
+    "network:check": "node scripts/check-coston2.mjs",
+    "deploy:coston2": "node scripts/deploy-coston2.mjs",
+    "deploy:matcher": "node scripts/deploy-commit-reveal.mjs",
+    "deploy:demo-token": "node scripts/deploy-demo-token.mjs",
+    "flow:start": "node scripts/start-rfq.mjs",
+    "flow:commit-reveal": "node scripts/run-commit-reveal.mjs",
+    "flow:match": "node scripts/match-rfq.mjs",
+    "flow:xrpl": "node scripts/send-xrpl-payment.mjs",
+    "flow:fdc": "node scripts/request-fdc-proof.mjs",
+    "flow:settle": "node scripts/settle-rfq.mjs",
+    "flow:verify": "node scripts/verify-live.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ethers": "^6.15.0",
+    "solc": "^0.8.30",
+    "xrpl": "^4.4.3"
+  },
+  "devDependencies": {}
+}
