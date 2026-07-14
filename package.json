@@ -17,7 +17,8 @@
     "flow:xrpl": "node scripts/send-xrpl-payment.mjs",
     "flow:fdc": "node scripts/request-fdc-proof.mjs",
     "flow:settle": "node scripts/settle-rfq.mjs",
-    "flow:verify": "node scripts/verify-live.mjs"
+    "flow:verify": "node scripts/verify-live.mjs",
+    "demo:smoke": "node scripts/test-demo-lab.mjs"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

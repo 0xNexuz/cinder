@@ -21,6 +21,17 @@ Open the deployed site and select **Testnet Lab**.
 
 The browser Lab covers real Coston2 escrow and matching transactions. The completed reference trade below additionally proves the XRPL and FDC settlement legs.
 
+Verified Lab smoke test from a separate wallet:
+
+| Lab action | Transaction |
+| --- | --- |
+| Claim 100 dcUSD | [`0x900d…976a`](https://coston2-explorer.flare.network/tx/0x900d9f809563518c8a363ff24ad9df95a926daae57173fc5829b9832b144976a) |
+| Approve escrow | [`0x7f08…cbab`](https://coston2-explorer.flare.network/tx/0x7f08cfc3f41be3cde60e6ff29149e7ea01002a8c0cc4c29e97413ca43453cbab) |
+| Create RFQ | [`0x8390…8fb3`](https://coston2-explorer.flare.network/tx/0x839092b2664f91a58dfb565acc752e171e38b9b72b24d14d320905995cce8fb3) |
+| Commit hidden quote | [`0xcbc7…9a52`](https://coston2-explorer.flare.network/tx/0xcbc79fe07704de4f567329c3c633441a33d78236e2bf8ca1be159d6650029a52) |
+| Reveal quote | [`0x6e65…24ea`](https://coston2-explorer.flare.network/tx/0x6e65eb6381bad2a704a9a8d8485042925eda583b597035bdc30cb5d3da7f24ea) |
+| Finalize match | [`0x9c5f…dbdf`](https://coston2-explorer.flare.network/tx/0x9c5f5d5fca9532c07271fd71cff86e08939b879b017acb1c896b8745c309dbdf) |
+
 ## Verified cross-chain trade
 
 Reference execution: commit–reveal RFQ `#1`, 10 XRP delivered, 10 cUSD released.
