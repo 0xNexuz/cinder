@@ -2,6 +2,9 @@
 
 Cinder is a commit–reveal RFQ market for buying native XRP with escrow on Flare.
 
+**Live application:** [cinder-beta.vercel.app](https://cinder-beta.vercel.app)  
+**Source:** [github.com/0xNexuz/cinder](https://github.com/0xNexuz/cinder)
+
 A buyer locks a Flare token and specifies an XRPL destination. Makers submit hashes of their XRP prices while bidding is open, then reveal those prices after the bidding deadline. The Coston2 contract selects the lowest valid quote inside the live FTSOv2 XRP/USD band. The winning maker sends native XRP with the contract-generated payment reference. Flare Data Connector verifies that XRPL payment before the escrow releases funds.
 
 ## Try the live demo
