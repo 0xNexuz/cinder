@@ -1,0 +1,14 @@
+.git
+.env
+node_modules
+artifacts
+contracts
+scripts
+src
+public
+work
+*.ts
+tsconfig*.json
+package.json
+package-lock.json
+FCC_DEPLOYMENT.md
