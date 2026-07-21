@@ -1,95 +1,112 @@
-# Cinder
+# Cinder Guaranteed RFQ
 
-Cinder is a commit–reveal RFQ market for buying native XRP with escrow on Flare.
+Cinder is a guaranteed private RFQ rail for buying native XRP without trusting a broker. Buyers escrow USDT0 on Flare, independent makers compete through sealed quotes and lock FXRP performance bonds, FTSOv2 constrains the execution price, and Flare Data Connector proves either XRP delivery or non-payment.
 
-**Live application:** [cinder-xreyys-projects.vercel.app](https://cinder-xreyys-projects.vercel.app)  
-**Source:** [github.com/0xNexuz/cinder](https://github.com/0xNexuz/cinder)
+- Live application: [cinder-xreyys-projects.vercel.app](https://cinder-xreyys-projects.vercel.app)
+- Documentation: [cinder-xreyys-projects.vercel.app/docs.html](https://cinder-xreyys-projects.vercel.app/docs.html)
+- Source: [github.com/0xNexuz/cinder](https://github.com/0xNexuz/cinder)
+- Networks: Flare Testnet Coston2 (chain `114`) and XRPL Testnet
 
-A buyer locks a Flare token and specifies an XRPL destination. Makers submit hashes of their XRP prices while bidding is open, then reveal those prices after the bidding deadline. The Coston2 contract selects the lowest valid quote inside the live FTSOv2 XRP/USD band. The winning maker sends native XRP with the contract-generated payment reference. Flare Data Connector verifies that XRPL payment before the escrow releases funds.
+## Why Cinder exists
 
-## Try the live demo
+A cross-chain XRP trade normally makes either the buyer or maker move first. Cinder replaces that trust gap with four enforceable guarantees:
 
-Open the deployed site and select **Testnet Lab**.
+1. The buyer's USDT0 is locked before makers compete.
+2. Makers cannot copy visible prices during bidding because quotes are committed as salted hashes.
+3. The winner locks FXRP that is returned after delivery or slashed after default.
+4. FDC, not a Cinder operator, proves whether the referenced XRPL payment occurred.
 
-1. Connect a test wallet to Coston2, chain ID `114`.
-2. Get C2FLR from the linked Flare faucet for gas.
-3. Click **Claim 100 dcUSD**. This creates a real Coston2 transaction.
-4. Click **Approve + create** to lock 10 dcUSD in a new RFQ.
-5. Submit a hidden quote. Its salt is generated and retained in that browser.
-6. Reveal after the bidding timer, then finalize after the reveal timer.
-7. Open every transaction hash directly from the Lab output.
+## Real testnet outcomes
 
-The browser Lab covers real Coston2 escrow and matching transactions. The completed reference trade below additionally proves the XRPL and FDC settlement legs.
+### RFQ #3: delivery and settlement
 
-Verified Lab smoke test from a separate wallet:
+Two independent maker wallets competed for a 2 XRP order. Maker 1 won at `$1.145771/XRP`; maker 2 quoted `$1.151505/XRP`.
 
-| Lab action | Transaction |
+| Event | Evidence |
 | --- | --- |
-| Claim 100 dcUSD | [`0x900d…976a`](https://coston2-explorer.flare.network/tx/0x900d9f809563518c8a363ff24ad9df95a926daae57173fc5829b9832b144976a) |
-| Approve escrow | [`0x7f08…cbab`](https://coston2-explorer.flare.network/tx/0x7f08cfc3f41be3cde60e6ff29149e7ea01002a8c0cc4c29e97413ca43453cbab) |
-| Create RFQ | [`0x8390…8fb3`](https://coston2-explorer.flare.network/tx/0x839092b2664f91a58dfb565acc752e171e38b9b72b24d14d320905995cce8fb3) |
-| Commit hidden quote | [`0xcbc7…9a52`](https://coston2-explorer.flare.network/tx/0xcbc79fe07704de4f567329c3c633441a33d78236e2bf8ca1be159d6650029a52) |
-| Reveal quote | [`0x6e65…24ea`](https://coston2-explorer.flare.network/tx/0x6e65eb6381bad2a704a9a8d8485042925eda583b597035bdc30cb5d3da7f24ea) |
-| Finalize match | [`0x9c5f…dbdf`](https://coston2-explorer.flare.network/tx/0x9c5f5d5fca9532c07271fd71cff86e08939b879b017acb1c896b8745c309dbdf) |
+| 2 USDT0 escrow created | [`0x784b...c78d`](https://coston2-explorer.flare.network/tx/0x784bc2d83d57365efe4021646434accd3d7ffcac9a48a6fe08db67ff3a74c78d) |
+| Maker 1 commitment | [`0x1930...6b96`](https://coston2-explorer.flare.network/tx/0x1930a3ac2c412697c9ac72c46ab5280c69dad13ae14223862cf5a76277816b96) |
+| Maker 2 commitment | [`0xa8b4...241e`](https://coston2-explorer.flare.network/tx/0xa8b41035b26b4a866592a14d8668d93ca0a3d9e0f2bbf75374fed13972d5241e) |
+| Maker 1 reveal | [`0xd9ed...244e`](https://coston2-explorer.flare.network/tx/0xd9ed9896cfe48cc26af1ca3766dc44685c8b2fcb3de4643be71a1a8f2be6244e) |
+| Maker 2 reveal | [`0x248c...251c`](https://coston2-explorer.flare.network/tx/0x248cc580c3068e6b1e073cd305c58e89bab6c0272350c0d8128448987932251c) |
+| Lowest quote finalized | [`0x4077...198c`](https://coston2-explorer.flare.network/tx/0x4077abb354d026680d0948aaf02f864fe0f838a4dc333d1444968d2d3f01198c) |
+| 2 XRP delivered | [`EE8A...8267`](https://testnet.xrpl.org/transactions/EE8A1987DDE14991AE137D38EBC055936C7D9FE79502A8F4D65667F321FE8267) |
+| FDC Payment request | [`0x7731...0caf`](https://coston2-explorer.flare.network/tx/0x773179cab9c5a52b313be8e5a03832ad0b548eb023090c0c661280c2d93a0caf) |
+| 2 USDT0 released; 1 FXRP returned | [`0x056a...9ddf`](https://coston2-explorer.flare.network/tx/0x056a36475f3e95dcca98832863583e5274ab7aa24cf231406e7197b535d59ddf) |
 
-## Verified cross-chain trade
+### RFQ #1: non-payment default
 
-Reference execution: commit–reveal RFQ `#1`, 10 XRP delivered, 10 cUSD released.
+The winning maker did not deliver XRP before the five-minute deadline. FDC proved non-existence across the specified XRPL ledger window.
 
-| Event | Verifiable evidence |
+| Event | Evidence |
 | --- | --- |
-| Escrow creation and commitments | [`0x0a7f…7bf8`](https://coston2-explorer.flare.network/tx/0x0a7f2ba87ca9439ec967f63356d032bd08fc8d7c31eb9a87adc5fa5e0c5c7bf8) |
-| Lowest quote finalized | [`0x3f12…5d9b`](https://coston2-explorer.flare.network/tx/0x3f1269fda3f4251e7f2bcf850ee6ed9322f55d3b7c574fb959653de1beed5d9b) |
-| 10 XRP payment | [`C396…610C`](https://testnet.xrpl.org/transactions/C3968091D074B48C6DABC34FAEA4B5B59B934476D160561279E8C8FD0A37610C) |
-| FDC request | [`0xd4f5…9c85`](https://coston2-explorer.flare.network/tx/0xd4f58ba01a8f7e10ef5957f1ace6aafc40fadad6bd4679098deaf92e7d3c9c85) |
-| FDC-verified release | [`0x605c…8c4e`](https://coston2-explorer.flare.network/tx/0x605c8544ed2391fdfbdc199c1f19442361b83bba71d800d31d756149547e8c4e) |
+| 2 USDT0 escrow created | [`0x9072...312d`](https://coston2-explorer.flare.network/tx/0x9072699d5c7545c40b663cf2fb89b0cb5dce73f52e6e86a05444dc0ecda3312d) |
+| Winner finalized | [`0x9a21...e43f`](https://coston2-explorer.flare.network/tx/0x9a21e16704c8283202e8abce1b79d7149bbdb91057a7f21caed52837c946e43f) |
+| FDC ReferencedPaymentNonexistence request | [`0x65df...1bfe`](https://coston2-explorer.flare.network/tx/0x65df49488eba4d7de451f5a831e1e774ed2bd9988e315797ba9b9892f91a1bfe) |
+| 2 USDT0 refunded; 1 FXRP slashed | [`0x5e81...0837`](https://coston2-explorer.flare.network/tx/0x5e81491036c49cdc4ff8760d1eeba4d3c66141bc49343028cd016de34ccf0837) |
 
-`npm run flow:verify` independently checks that the RFQ is settled, the XRPL transaction is validated with `tesSUCCESS`, and the winning maker received the escrow.
+## Architecture
 
-## Deployed contracts
+| Module | Responsibility | Coston2 address |
+| --- | --- | --- |
+| `CinderGuaranteedEscrow` | USDT0 custody and dual-outcome settlement | [`0x27DA...4744`](https://coston2-explorer.flare.network/address/0x27DAa2d5BfDD9A3C7657baDc59E91c3649f14744) |
+| `CinderCommitRevealMatcherV2` | Domain-separated two-phase quote competition | [`0x166a...6AE0`](https://coston2-explorer.flare.network/address/0x166aB7D743Fc71dAd7Dba19957fd3465531b6AE0) |
+| `CinderBondVault` | FXRP lock, release and slash accounting | [`0xE009...37CF`](https://coston2-explorer.flare.network/address/0xE0095bA27bce7a8c82eBf0e00F1C54eF552737CF) |
+| `XrplFdcSettlementAdapter` | Payment and non-payment proof validation | [`0x662b...5B01`](https://coston2-explorer.flare.network/address/0x662bEAf80369aa2A2b9BAcd17cd5dDbA8Ec15B01) |
+| `FtsoXrpUsdAdapter` | Live XRP/USD price guard | [`0xcB10...60BF`](https://coston2-explorer.flare.network/address/0xcB10895076A8a2b5E2e719CEd7fC43f906Af60BF) |
 
-All application contracts are on Flare Testnet Coston2.
+Official Coston2 assets:
 
-| Contract | Address |
-| --- | --- |
-| Commit–reveal escrow | [`0x02F8…Cd99`](https://coston2-explorer.flare.network/address/0x02F86e0e1c31bfD8023A065DBc04202572DbCd99) |
-| Public one-claim demo token | [`0x1B4D…3670`](https://coston2-explorer.flare.network/address/0x1B4D54c28Eb7Aa002DBb5d2B7740bC863B813670) |
-| FTSOv2 XRP/USD adapter | [`0xcB10…60BF`](https://coston2-explorer.flare.network/address/0xcB10895076A8a2b5E2e719CEd7fC43f906Af60BF) |
-| FDC XRPL Payment adapter | [`0x0F95…3FFB`](https://coston2-explorer.flare.network/address/0x0F95553e4a2B1B9672bEf526c8eb274b73333FFB) |
+- USDT0: [`0xC1A5...E71F`](https://coston2-explorer.flare.network/address/0xC1A5B41512496B80903D1f32d6dEa3a73212E71F)
+- FXRP: [`0x0b6A...3dc7`](https://coston2-explorer.flare.network/address/0x0b6A3645c240605887a5532109323A3E12273dc7)
 
-## Why Flare is required
+The matcher is deliberately separate. Commit-reveal V2 is live today; an FCC matcher can later implement the same boundary when its runtime is dependable. This repository does not claim a live FCC deployment.
 
-- Coston2 holds the buyer's escrow and enforces the RFQ deadlines.
-- FTSOv2 rejects a winning quote outside the buyer's permitted XRP/USD deviation.
-- FDC proves the exact XRPL destination, amount and 32-byte payment reference before release.
-- The XRPL transaction hash is marked consumed, preventing one payment proof from releasing multiple escrows.
-
-## Privacy and trust model
-
-Prices are hidden during bidding because only `keccak256(abi.encode(rfqId, maker, price, salt))` is published. A reveal that does not match the original commitment is rejected. Prices become public during the reveal phase; Cinder provides bidding privacy, not permanent TEE secrecy. Matching and settlement require no Cinder operator key.
-
-## Local verification
+## Run locally
 
 ```bash
 npm install
 npm run contracts:check
 npm test
-npm run flow:verify
 ```
 
-To execute a fresh automated cross-chain testnet run, copy `.env.example` to `.env`, use testnet-only keys, then run:
+For a fresh guaranteed testnet execution, configure testnet-only keys in `.env` and run:
 
 ```bash
-npm run accounts:create
-npm run network:check
-npm run deploy:coston2
-npm run deploy:matcher
-npm run deploy:demo-token
-npm run flow:commit-reveal
-npm run flow:xrpl
-npm run flow:fdc
-npm run flow:settle
-npm run flow:verify
+npm run deploy:guaranteed
+npm run guaranteed:auction
+npm run guaranteed:pay
+npm run guaranteed:keeper
 ```
 
-The full flow uses real testnet assets and can take several minutes while commit–reveal and FDC voting windows finalize. `.env` and generated local deployment state are excluded from Git.
+For an expired unpaid RFQ:
+
+```bash
+npm run guaranteed:default
+```
+
+The proof keeper checkpoints FDC request hashes and voting rounds, derives XRPL ledger boundaries for non-payment proofs, and resumes after transient RPC or Data Availability failures without duplicating an accepted request.
+
+## Public demo separation
+
+The primary interface displays the production-shaped USDT0/FXRP guarantee and verifies its real transaction receipts. A separate public sandbox uses a one-claim dcUSD token with the V1 escrow so any judge can create a fresh Coston2 hash without access to controlled maker keys or scarce FXRP test liquidity.
+
+## New work in this program
+
+- Guaranteed USDT0 escrow and explicit payment/default state machine.
+- Isolated FXRP bond vault with return and slash paths.
+- Two-independent-maker matcher V2.
+- FDC Payment and ReferencedPaymentNonexistence adapter.
+- Resumable proof-automation keeper and XRPL ledger-boundary discovery.
+- Real XRPL payment, real FDC settlement, real non-payment refund and real bond slash.
+- Reworked public proof console, documentation and transaction sandbox.
+
+## Next steps
+
+1. Audit the escrow, matcher and vault; add invariant and adversarial property tests.
+2. Onboard independent maker operators and expose a quote API.
+3. Pilot with XRP payment businesses and treasury desks using controlled limits.
+4. Add an FCC matcher adapter when the runtime is dependable.
+5. Deploy to Flare Mainnet after audit and pilot validation.
+
+Secrets and generated local deployment state are excluded from Git.
