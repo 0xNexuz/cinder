@@ -32,6 +32,19 @@ contract MockFdcSettlementAdapter {
         require(amountDrops > 0, "missing amount");
         return nextTxHash;
     }
+
+    function verifyXrplNonPayment(
+        bytes calldata proof,
+        bytes32 paymentReference,
+        bytes32,
+        uint256 amountDrops,
+        uint64 matchedAt,
+        uint64 deadline
+    ) external pure returns (bytes32 proofId) {
+        require(paymentReference != bytes32(0), "missing reference");
+        require(amountDrops > 0 && matchedAt < deadline, "invalid window");
+        return keccak256(proof);
+    }
 }
 
 contract MockERC20 {

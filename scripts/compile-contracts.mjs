@@ -6,6 +6,9 @@ const root = process.cwd()
 const contractFiles = [
   'contracts/CinderEscrow.sol',
   'contracts/CinderCommitRevealEscrow.sol',
+  'contracts/CinderBondVault.sol',
+  'contracts/CinderCommitRevealMatcherV2.sol',
+  'contracts/CinderGuaranteedEscrow.sol',
   'contracts/FlareAdapters.sol',
   'contracts/CinderToken.sol',
   'contracts/CinderDemoToken.sol',

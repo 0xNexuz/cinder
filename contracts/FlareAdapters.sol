@@ -46,8 +46,42 @@ interface IPayment {
     }
 }
 
+interface IReferencedPaymentNonexistence {
+    struct RequestBody {
+        uint64 minimalBlockNumber;
+        uint64 deadlineBlockNumber;
+        uint64 deadlineTimestamp;
+        bytes32 destinationAddressHash;
+        uint256 amount;
+        bytes32 standardPaymentReference;
+        bool checkSourceAddresses;
+        bytes32 sourceAddressesRoot;
+    }
+
+    struct ResponseBody {
+        uint64 minimalBlockTimestamp;
+        uint64 firstOverflowBlockNumber;
+        uint64 firstOverflowBlockTimestamp;
+    }
+
+    struct Response {
+        bytes32 attestationType;
+        bytes32 sourceId;
+        uint64 votingRound;
+        uint64 lowestUsedTimestamp;
+        RequestBody requestBody;
+        ResponseBody responseBody;
+    }
+
+    struct Proof {
+        bytes32[] merkleProof;
+        Response data;
+    }
+}
+
 interface IFdcVerification {
     function verifyPayment(IPayment.Proof calldata proof) external view returns (bool proved);
+    function verifyReferencedPaymentNonexistence(IReferencedPaymentNonexistence.Proof calldata proof) external view returns (bool proved);
 }
 
 contract FtsoXrpUsdAdapter {
@@ -97,6 +131,7 @@ contract FdcXrplPaymentAdapter {
     error WrongReference();
     error WrongDestination();
     error InsufficientPayment();
+    error InvalidSearchWindow();
 
     constructor(address fdcVerification_) {
         fdcVerification = IFdcVerification(fdcVerification_);
@@ -119,5 +154,31 @@ contract FdcXrplPaymentAdapter {
             revert InsufficientPayment();
         }
         txHash = proof.data.requestBody.transactionId;
+    }
+
+    function verifyXrplNonPayment(
+        bytes calldata encodedProof,
+        bytes32 paymentReference,
+        bytes32 destinationHash,
+        uint256 amountDrops,
+        uint64 matchedAt,
+        uint64 deadline
+    ) external view returns (bytes32 proofId) {
+        IReferencedPaymentNonexistence.Proof memory proof = abi.decode(encodedProof, (IReferencedPaymentNonexistence.Proof));
+        if (!fdcVerification.verifyReferencedPaymentNonexistence(proof)) revert InvalidFdcProof();
+        if (proof.data.attestationType != bytes32("ReferencedPaymentNonexistence")) revert WrongAttestationType();
+        if (proof.data.sourceId != TEST_XRP_SOURCE) revert WrongSource();
+        IReferencedPaymentNonexistence.RequestBody memory request = proof.data.requestBody;
+        IReferencedPaymentNonexistence.ResponseBody memory response = proof.data.responseBody;
+        if (request.standardPaymentReference != paymentReference) revert WrongReference();
+        if (request.destinationAddressHash != destinationHash) revert WrongDestination();
+        if (request.amount != amountDrops || request.checkSourceAddresses) revert InsufficientPayment();
+        if (
+            request.deadlineTimestamp != deadline ||
+            response.minimalBlockTimestamp > matchedAt ||
+            response.firstOverflowBlockTimestamp <= deadline ||
+            request.minimalBlockNumber >= response.firstOverflowBlockNumber
+        ) revert InvalidSearchWindow();
+        proofId = keccak256(encodedProof);
     }
 }
