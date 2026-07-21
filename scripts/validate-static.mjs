@@ -2,6 +2,7 @@ import fs from 'node:fs'
 
 const requiredFiles = [
   'index.html',
+  'docs.html',
   'README.md',
   'contracts/CinderEscrow.sol',
   'contracts/mocks/MockAdapters.sol',
@@ -14,6 +15,7 @@ for (const file of requiredFiles) {
 }
 
 const html = fs.readFileSync('index.html', 'utf8')
+const docs = fs.readFileSync('docs.html', 'utf8')
 const contract = fs.readFileSync('contracts/CinderEscrow.sol', 'utf8')
 
 const requiredHtml = [
@@ -22,6 +24,13 @@ const requiredHtml = [
   'https://coston2-api.flare.network/ext/C/rpc',
   'wallet_switchEthereumChain',
   'FDC verifies',
+]
+
+const requiredDocs = [
+  'Cinder / Documentation',
+  'Run a real Coston2 RFQ',
+  'Verified reference execution',
+  'Live contracts',
 ]
 
 const requiredContract = [
@@ -37,6 +46,12 @@ const requiredContract = [
 for (const text of requiredHtml) {
   if (!html.includes(text)) {
     throw new Error(`index.html is missing: ${text}`)
+  }
+}
+
+for (const text of requiredDocs) {
+  if (!docs.includes(text)) {
+    throw new Error(`docs.html is missing: ${text}`)
   }
 }
 
