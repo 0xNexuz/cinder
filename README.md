@@ -2,8 +2,8 @@
 
 Cinder is a guaranteed private RFQ rail for buying native XRP without trusting a broker. Buyers escrow USDT0 on Flare, independent makers compete through sealed quotes and lock FXRP performance bonds, FTSOv2 constrains the execution price, and Flare Data Connector proves either XRP delivery or non-payment.
 
-- Live application: [cinder-xreyys-projects.vercel.app](https://cinder-xreyys-projects.vercel.app)
-- Documentation: [cinder-xreyys-projects.vercel.app/docs.html](https://cinder-xreyys-projects.vercel.app/docs.html)
+- Live application: [cinder-beta.vercel.app](https://cinder-beta.vercel.app)
+- Documentation: [cinder-beta.vercel.app/docs](https://cinder-beta.vercel.app/docs)
 - Source: [github.com/0xNexuz/cinder](https://github.com/0xNexuz/cinder)
 - Networks: Flare Testnet Coston2 (chain `114`) and XRPL Testnet
 
