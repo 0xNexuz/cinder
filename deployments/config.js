@@ -39,6 +39,27 @@ window.CINDER_CONFIG = {
     "winner": "0x4727f9f576e318008780a0B9d323E4F970b38F43",
     "stableAsset": "USDT0",
     "bondAsset": "FXRP",
+    "auction": {
+      "ftsoPriceE6": "1146918",
+      "maxPriceE6": "1181325",
+      "clearingPriceE6": "1145771",
+      "quotes": [
+        {
+          "maker": "0x4727f9f576e318008780a0B9d323E4F970b38F43",
+          "priceE6": "1145771",
+          "winner": true,
+          "commitTxHash": "0x1930a3ac2c412697c9ac72c46ab5280c69dad13ae14223862cf5a76277816b96",
+          "revealTxHash": "0xd9ed9896cfe48cc26af1ca3766dc44685c8b2fcb3de4643be71a1a8f2be6244e"
+        },
+        {
+          "maker": "0x8BAf589461f480b7E137C7D2bF7c4A3E5Acc1753",
+          "priceE6": "1151505",
+          "winner": false,
+          "commitTxHash": "0xa8b41035b26b4a866592a14d8668d93ca0a3d9e0f2bbf75374fed13972d5241e",
+          "revealTxHash": "0x248cc580c3068e6b1e073cd305c58e89bab6c0272350c0d8128448987932251c"
+        }
+      ]
+    },
     "transactions": {
       "create": "0x784bc2d83d57365efe4021646434accd3d7ffcac9a48a6fe08db67ff3a74c78d",
       "finalize": "0x4077abb354d026680d0948aaf02f864fe0f838a4dc333d1444968d2d3f01198c",
@@ -53,6 +74,16 @@ window.CINDER_CONFIG = {
     "winner": "0x4727f9f576e318008780a0B9d323E4F970b38F43",
     "stableAsset": "USDT0",
     "bondAsset": "FXRP",
+    "auction": {
+      "clearingPriceE6": "1145810",
+      "quotes": [
+        {
+          "maker": "0x4727f9f576e318008780a0B9d323E4F970b38F43",
+          "priceE6": "1145810",
+          "winner": true
+        }
+      ]
+    },
     "transactions": {
       "create": "0x9072699d5c7545c40b663cf2fb89b0cb5dce73f52e6e86a05444dc0ecda3312d",
       "finalize": "0x9a21e16704c8283202e8abce1b79d7149bbdb91057a7f21caed52837c946e43f",
